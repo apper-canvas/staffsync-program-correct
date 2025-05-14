@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
+import { addEmployee } from '../store/employeeSlice';
 import getIcon from '../utils/iconUtils';
 
 const MainFeature = ({ onEmployeeAdded }) => {
@@ -17,6 +19,9 @@ const MainFeature = ({ onEmployeeAdded }) => {
   const ImageIcon = getIcon('Image');
   const CheckIcon = getIcon('Check');
   const InfoIcon = getIcon('Info');
+  
+  // Redux
+  const dispatch = useDispatch();
   
   // Form state
   const [formData, setFormData] = useState({
@@ -147,8 +152,12 @@ const MainFeature = ({ onEmployeeAdded }) => {
     setIsSubmitting(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Create a new employee record
+      const employeeData = { ...formData };
+      
+      // Use the Redux action to create the employee
+      const result = await dispatch(addEmployee(employeeData)).unwrap();
+      console.log('Employee created:', result);
       
       // In a real app, we'd submit to an actual API
       // For now, we'll just call the callback to update UI
@@ -171,7 +180,7 @@ const MainFeature = ({ onEmployeeAdded }) => {
       
     } catch (error) {
       toast.error("Failed to add employee. Please try again.");
-      console.error("Error adding employee:", error);
+      console.error("Error adding employee:", error.message || error);
     } finally {
       setIsSubmitting(false);
     }
