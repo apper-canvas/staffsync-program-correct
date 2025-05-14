@@ -52,7 +52,7 @@ const EmployeeList = () => {
   }, [dispatch, currentPage, employeesPerPage, searchTerm, selectedDepartment, sortField, sortOrder]);
   
   // Get unique departments for filter
-  const departments = Array.from(new Set(employees.map(emp => emp.department))).filter(Boolean);
+  const departments = Array.from(new Set(employees.map(emp => emp?.department || ''))).filter(Boolean);
   
   // Handle sorting
   const handleSort = (field) => {
@@ -212,16 +212,16 @@ const EmployeeList = () => {
                           {employee.photo ? (
                             <img src={employee.photo} alt={`${employee.firstName} ${employee.lastName}`} className="h-8 w-8 object-cover" />
                           ) : (
-                            <span className="text-xs font-medium">{employee.firstName?.charAt(0)}{employee.lastName?.charAt(0)}</span>
+                            <span className="text-xs font-medium">{employee?.firstName?.charAt(0) || ''}{employee?.lastName?.charAt(0) || ''}</span>
                           )}
                         </div>
-                        {employee.firstName} {employee.lastName}
+                        {employee?.firstName || ''} {employee?.lastName || ''}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-sm text-surface-700 dark:text-surface-300">{employee.position}</td>
-                    <td className="px-4 py-3 text-sm text-surface-700 dark:text-surface-300">{employee.department}</td>
+                    <td className="px-4 py-3 text-sm text-surface-700 dark:text-surface-300">{employee?.position || 'N/A'}</td>
+                    <td className="px-4 py-3 text-sm text-surface-700 dark:text-surface-300">{employee?.department || 'N/A'}</td>
                     <td className="px-4 py-3 text-sm text-surface-700 dark:text-surface-300">
-                      {employee.startDate ? format(new Date(employee.startDate), 'MMM d, yyyy') : 'N/A'}
+                      {employee?.startDate ? format(new Date(employee.startDate), 'MMM d, yyyy') : 'N/A'}
                     </td>
                     <td className="px-4 py-3 text-sm text-right space-x-2 whitespace-nowrap">
                       <Link to={`/employees/${employee.Id}`} className="inline-flex items-center px-2.5 py-1.5 border border-surface-300 dark:border-surface-600 text-xs font-medium rounded text-surface-700 dark:text-surface-300 bg-white dark:bg-surface-800 hover:bg-surface-50 dark:hover:bg-surface-700">
